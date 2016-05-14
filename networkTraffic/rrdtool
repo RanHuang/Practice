@@ -1,0 +1,31 @@
+RRDtool: http://oss.oetiker.ch/rrdtool
+
+First: run create.py to create a rrd file
+Second: add a task by crontab to update the data of network traffic
+Third: run graph.py to create a png file
+    then use the command "$ eog NetworkFlow.png" to show the traffic
+
+$ sudo apt-get install python-rrdtool librrd-dev
+$ sudo pip install python-rrdtool
+
+使用普通用户运行添加crontab任务似乎没有运行，其实是调用update.py没有正确写入rrd文件，因为rrd文件使用相对路径名，在执行crontab时shell环境变量已经发生变化，无法根据相对路径正确定位rrd文件，所以在update.py中应该指出rrd文件的完整路径名
+$ crontab -e
+*/5 * * * * /usr/bin/python /home/nick/program/networkTraffic/update.py > /dev/null 2>&1
+
+
+查看rrd文件结构信息
+$ rrdtool info NetworkFlow.rrd
+查看rrd文件地一个数据更新时间
+$ rrdtool first NetworkFlow.rrd
+查看rrd文件最近一次更新时间
+$ rrdtool last NetworkFlow.rrd
+根据指定时间、CF查询rrd文件
+$ rrdtool fetch NetworkFlow.rrd AVERAGE
+
+Linux服务器上监控网络带宽的18个常用命令:(http://os.51cto.com/art/201404/435279.htm)
+    监控总体带宽――nload、bmon、slurm、bwm-ng、cbm、speedometer和netload
+    监控总体带宽（批量式输出）――vnstat、ifstat、dstat和collectl
+    每个套接字的带宽――iftop、iptraf、tcptrack、pktstat、netwatch和trafshow
+    每个进程的带宽――nethogs
+Python与rrdtool的结合模块:(http://www.cnblogs.com/wjoyxt/p/5035185.html)
+
