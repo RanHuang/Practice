@@ -3,13 +3,30 @@
 """
     Author: Nick Huang
     Version: 2016-05-11
-    Description: 
+    Description:
 """
-
 import platform
 
-pythonVersion = platform.python_version()
-uname = platform.uname();
+def showPlatformInfo():
+    pythonVersion = platform.python_version()
+    print "Current python version is %s"% (pythonVersion)
 
-print "Current python version is %s"%(pythonVersion)
-print "uname: ", uname
+    uname = platform.uname()
+    print "uname: ", uname
+
+    arch = platform.architecture()
+    print "Architecture: ", arch
+
+    machine = platform.machine()
+    print "Machine: ", machine
+
+    node = platform.node()
+    print "Node: ", node
+
+    print "PlatformInfo: ", platform.platform()
+    print "Processor: ", platform.processor()
+    print "System: ", platform.system()
+    print "Version: ", platform.version()
+
+if __name__ == '__main__':
+    showPlatformInfo()
