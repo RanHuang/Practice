@@ -26,28 +26,28 @@ public:
 };
 int main()
 {
-    vector<int> arrInt = { 1,2,3,4,5,6,7,8,9};
-    arrInt.push_back(10);
+    vector<int> vecInt = { 1,2,3,4,5,6,7,8,9};
+    vecInt.push_back(10);
     
-    random_shuffle(arrInt.begin(), arrInt.end());
+    random_shuffle(vecInt.begin(), vecInt.end());
     cout << "随机排序后的vector：" << endl;
-    for (const auto &item : arrInt)
+    for (const auto &item : vecInt)
         cout << item << " ";
     cout << endl<<endl;
 
-    partition(arrInt.begin(), arrInt.end(), lessThan);
+    partition(vecInt.begin(), vecInt.end(), lessThan);
     cout << "以6为界分组：" << endl;
-    printVecInt(arrInt);
+    printVecInt(vecInt);
     cout << endl;
 
-    random_shuffle(arrInt.begin(), arrInt.end());
+    random_shuffle(vecInt.begin(), vecInt.end());
     cout << "随机排序后的vector：" << endl;
-    printVecInt(arrInt);
+    printVecInt(vecInt);
     cout << endl;
 
-    partition(arrInt.begin(), arrInt.end(), [](auto value) {return value > 5; });
+    partition(vecInt.begin(), vecInt.end(), [](auto value) {return value > 5; });
     cout << "以5为界分组：" << endl;
-    printVecInt(arrInt);
+    printVecInt(vecInt);
     cout << endl;
 
     vector<int> vec(10); //生成含有10个整数的vector，值初始化为0
