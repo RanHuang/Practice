@@ -1,5 +1,8 @@
 package leetcode.simple;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author nick
  * @date 2019-06-19 星期三 20:47
@@ -18,16 +21,31 @@ package leetcode.simple;
  **/
 public class TwoSum {
     public static void main(String[] args) {
-        int[] nums = {2, 7, 11, 15};
+        int[] nums = {8, 7, 11, 1};
         int target = 9;
-        int[] result = twoSum(nums, target);
-        for (int i : result) {
-            System.out.println(result[i]);
+        int[] result = twoSumHash(nums, target);
+        for (int value : result) {
+            System.out.println(value);
         }
 
     }
 
-    public static int[] twoSum(int[] nums, int target) {
+    public static int[] twoSumHash(int[] nums, int target) {
+        int size = nums.length;
+        Map<Integer, Integer> valueIndexMap = new HashMap<>(size);
+        for (int i = size - 1; i >= 0; i--) {
+            int val1 = nums[i];
+            int val2 = target - val1;
+            if (valueIndexMap.containsKey(val2)) {
+                return new int[]{i, valueIndexMap.get(val2)};
+            }
+            valueIndexMap.put(val1, i);
+        }
+
+        throw new RuntimeException("Not Found");
+    }
+
+    public static int[] twoSumExhausition(int[] nums, int target) {
         int size = nums.length;
         int i = 0;
         int j = 0;
