@@ -36,16 +36,48 @@ import java.util.Set;
 public class LongestSubstring {
     public static void main(String[] args) {
         String str1st = "abcabcbb";
-        int length1st = lengthOfLongestSubstring(str1st);
+        int length1st = lengthOfLongestSubstringImprovement(str1st);
         System.out.println(length1st);
 
         String str2nd = "bbbbb";
-        int length2nd = lengthOfLongestSubstring(str2nd);
+        int length2nd = lengthOfLongestSubstringBrute(str2nd);
         System.out.println(length2nd);
 
         String str3rd = "au";
-        int length3rd = lengthOfLongestSubstring(str3rd);
+        int length3rd = lengthOfLongestSubstringImprovement(str3rd);
         System.out.println(length3rd);
+    }
+
+    /**
+     * 改进算法：从前向后遍历字符串，将当前字符与不重复子串匹配：
+     *  1.遇到重复字符记为a， a...a, 则新的不重复子串为 ...a
+     *  2.如果未遇到重复字符，则不重复字串扩充一个字符
+     * @param s
+     * @return
+     */
+    public static int lengthOfLongestSubstringImprovement(String s) {
+        if (s == null || s.length() < 2) {
+            // 空串或仅包含一个字符的字符串
+            return s.length();
+        }
+
+        char[] chars = s.toCharArray();
+        int sLength = chars.length;
+        int maxLength = 0;
+        int startOfSubstring = 0;
+        for (int current = 0; current < sLength; current++) {
+            for (int index = startOfSubstring; index < current; index++) {
+                if (chars[index] == chars[current]) {
+                    // 遇到重复字符，则前面为包含非重复字符的字串
+                    startOfSubstring = index + 1;
+                    break;
+                }
+            }
+            int subLength = current - startOfSubstring + 1;
+            maxLength = Math.max(maxLength, subLength);
+        }
+
+        return maxLength;
     }
 
     /**
@@ -54,7 +86,7 @@ public class LongestSubstring {
      * @param
      * @return
      */
-    public static int lengthOfLongestSubstring(String s) {
+    public static int lengthOfLongestSubstringBrute(String s) {
         if (s == null || s.length() < 2) {
             // 空串或仅包含一个字符的字符串
             return s.length();
