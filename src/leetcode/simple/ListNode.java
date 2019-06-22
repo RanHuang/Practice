@@ -12,4 +12,27 @@ public class ListNode {
         val = x;
         next = null;
     }
+
+    /**
+     * 顺序输出节点数据
+     *
+     * @param listNode
+     */
+    public static void printList(ListNode listNode) {
+        if (listNode == null) {
+            System.out.println("List is empty.");
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("[").append(listNode.val);
+
+        ListNode node = listNode.next;
+        while (node != null) {
+            sb.append("->").append(node.val);
+            node = node.next;
+        }
+        sb.append("]");
+        System.out.println(sb.toString());
+    }
 }
