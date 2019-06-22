@@ -83,13 +83,3 @@ public class CycleLink {
         return node1st;
     }
 }
-
-class ListNode {
-    int val;
-    ListNode next;
-
-    ListNode(int x) {
-        val = x;
-        next = null;
-    }
-}
