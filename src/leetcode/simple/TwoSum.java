@@ -30,6 +30,13 @@ public class TwoSum {
 
     }
 
+    /**
+     * Hash记录已经访问过的数字
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
     public static int[] twoSumHash(int[] nums, int target) {
         int size = nums.length;
         Map<Integer, Integer> valueIndexMap = new HashMap<>(size);
@@ -45,13 +52,19 @@ public class TwoSum {
         throw new RuntimeException("Not Found");
     }
 
+    /**
+     * 暴力搜索
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
     public static int[] twoSumExhausition(int[] nums, int target) {
         int size = nums.length;
         int i = 0;
-        int j = 0;
         for (; i < size; i++) {
             int a = nums[i];
-            for (j = i + 1; j < size; j++) {
+            for (int j = i + 1; j < size; j++) {
                 int b = nums[j];
                 if (a + b == target) {
                     int[] result = {i, j};
