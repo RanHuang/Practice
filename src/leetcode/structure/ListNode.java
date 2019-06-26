@@ -1,4 +1,4 @@
-package leetcode.simple;
+package leetcode.structure;
 
 /**
  * @author nick
@@ -8,7 +8,7 @@ public class ListNode {
     public int val;
     public ListNode next;
 
-    ListNode(int x) {
+    public ListNode(int x) {
         val = x;
         next = null;
     }
@@ -34,5 +34,21 @@ public class ListNode {
         }
         sb.append("]");
         System.out.println(sb.toString());
+    }
+
+    public static ListNode createList(int[] vals) {
+        if (null == vals || vals.length == 0) {
+            return null;
+        }
+
+        ListNode head = new ListNode(vals[0]);
+
+        ListNode pre = head;
+        for (int i = 1; i < vals.length; i++) {
+            ListNode node = new ListNode(vals[i]);
+            pre.next = node;
+            pre = node;
+        }
+        return head;
     }
 }
