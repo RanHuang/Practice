@@ -41,18 +41,18 @@ public class TreeNode {
 
     public static void showTreeNodeVal(TreeNode root) {
         List<String> result = new LinkedList<>();
-        before(root, result);
+        preorderTraversal(root, result);
         String dispData = "[" + StringUtils.join(result, ",");
         System.out.println(dispData);
     }
 
-    private static void before(TreeNode root, List<String> lstData) {
+    private static void preorderTraversal(TreeNode root, List<String> lstData) {
         if (root == null) {
             lstData.add(null);
             return;
         }
         lstData.add(String.valueOf(root.val));
-        before(root.left, lstData);
-        before(root.right, lstData);
+        preorderTraversal(root.left, lstData);
+        preorderTraversal(root.right, lstData);
     }
 }
