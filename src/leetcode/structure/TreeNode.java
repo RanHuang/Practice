@@ -1,5 +1,10 @@
 package leetcode.structure;
 
+import com.sun.deploy.util.StringUtils;
+
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * @author nick
  * @date 2019-06-28 星期五 21:32
@@ -35,20 +40,19 @@ public class TreeNode {
     }
 
     public static void showTreeNodeVal(TreeNode root) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("[");
-        before(root, sb);
-        sb.append("]");
-        System.out.println(sb.toString());
+        List<String> result = new LinkedList<>();
+        before(root, result);
+        String dispData = "[" + StringUtils.join(result, ",");
+        System.out.println(dispData);
     }
 
-    private static void before(TreeNode root, StringBuilder sb) {
+    private static void before(TreeNode root, List<String> lstData) {
         if (root == null) {
-            sb.append("null, ");
+            lstData.add(null);
             return;
         }
-        sb.append(root.val).append(", ");
-        before(root.left, sb);
-        before(root.right, sb);
+        lstData.add(String.valueOf(root.val));
+        before(root.left, lstData);
+        before(root.right, lstData);
     }
 }
