@@ -24,30 +24,39 @@ public class Permutaion {
             size *= i;
         }
         List<List<Integer>> result = new ArrayList<>(size);
-        List<Integer> src = new ArrayList<>();
-        for (int i = 0; i < nums.length; i++) {
-            src.add(nums[i]);
-        }
+
         List<Integer> value = new ArrayList<>(nums.length);
-        permuteInner(src, value, result);
+        backTrack(nums, 0, result);
         return result;
     }
 
-    private void permuteInner(List<Integer> src, List<Integer> value, List<List<Integer>> result) {
-        if (src.isEmpty()) {
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+
+    /**
+     * 回溯法求解整数序列的全排列
+     *
+     * @param nums
+     * @param start
+     * @param result
+     */
+    private void backTrack(int[] nums, int start, List<List<Integer>> result) {
+        if (start == nums.length - 1) {
+            List<Integer> value = new ArrayList<>(nums.length);
+            for (int i = 0; i < nums.length; i++) {
+                value.add(nums[i]);
+            }
             result.add(value);
             return;
         }
-        for (Integer item : src) {
-            List<Integer> subSrc = new ArrayList<>();
-            subSrc.addAll(src);
-            subSrc.remove(item);
 
-            List<Integer> plusValue = new ArrayList<>(value);
-            plusValue.add(item);
-
-            permuteInner(subSrc, plusValue, result);
-
+        for (int i = start; i < nums.length; i++) {
+            swap(nums, start, i);
+            backTrack(nums, start + 1, result);
+            swap(nums, start, i);
         }
     }
 
