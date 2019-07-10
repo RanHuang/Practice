@@ -37,25 +37,25 @@ public class Square {
         int n = 2;
         double squareRoot = squareRootBinarySearch(n);
         System.out.println(squareRoot);
+        // 1.414215087890625
     }
 
     /**
      * 牛顿迭代法求解整数平方根
-     *  x(n+1) = x(n) - f(x(n))/f'(x(n))
+     * x(n+1) = x(n) - f(x(n))/f'(x(n))
+     *
      * @param n
      * @return
      */
     public double squareRootNewtonRaphsonMethod(int n) {
         // 迭代次数
-        int times = 10;
-        double root = n/2.0;
-        int index = 0;
-        while (index < times) {
-            index++;
+        double precision = Math.pow(10, -5);
+        double root = n / 2.0;
+        do {
             double f = Math.pow(root, 2) - n;
             double f_ = 2.0 * root;
-            root = root - f/f_;
-        }
+            root = root - f / f_;
+        } while (Math.abs(Math.pow(root, 2) - n) > precision);
         return root;
     }
 
@@ -64,5 +64,6 @@ public class Square {
         int n = 2;
         double squareRoot = squareRootBinarySearch(n);
         System.out.println(squareRoot);
+        // 1.414215087890625
     }
 }
