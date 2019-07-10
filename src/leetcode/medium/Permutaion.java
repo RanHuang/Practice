@@ -45,6 +45,7 @@ public class Permutaion {
      */
     private void backTrack(int[] nums, int start, List<List<Integer>> result) {
         if (start == nums.length - 1) {
+            // 候选序列中只剩一个数，则搜集排列结果
             List<Integer> value = new ArrayList<>(nums.length);
             for (int i = 0; i < nums.length; i++) {
                 value.add(nums[i]);
@@ -54,8 +55,10 @@ public class Permutaion {
         }
 
         for (int i = start; i < nums.length; i++) {
+            // 前移选中数字，更新候选序列
             swap(nums, start, i);
             backTrack(nums, start + 1, result);
+            // 回溯
             swap(nums, start, i);
         }
     }
