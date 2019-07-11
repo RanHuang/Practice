@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class GroupAnagrams {
 
     @Test
-    public void test() {
+    public void testGroupAnagrams() {
         String[] strs = {"eat", "tea", "tan", "ate", "nat", "bat"};
         List<List<String>> groups = groupAnagrams(strs);
         Assert.assertEquals(3, groups.size());
