@@ -91,7 +91,7 @@ public class Rotate {
     private void rotateLayer(int[][] matrix, int layer) {
         int start = layer - 1;
         int end = matrix.length - layer;
-        // 逐个进行旋转(最后一个不与旋转，否则会导致边角元素旋转两次)
+        // 逐个进行旋转(最后一个不予旋转，否则会导致边角元素旋转两次)
         for (int i = 0; i < end - start; i++) {
             // (start,start+i), (start+i,end), (end,end-i), (end-i,start)
             int tmp = matrix[end - i][start];
