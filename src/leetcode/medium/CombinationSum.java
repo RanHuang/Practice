@@ -50,6 +50,8 @@ public class CombinationSum {
     }
 
     /**
+     * 使用回溯算法（注意元素可重复使用）
+     *
      * @param candidates
      * @param target
      * @param start
@@ -68,6 +70,7 @@ public class CombinationSum {
             }
             List<Integer> plusRet = new ArrayList<>(ret);
             plusRet.add(candidates[i]);
+            // start <- i, 重复使用当前元素
             this.backTrack(candidates, target, i, plusRet, sum + candidates[i], result);
         }
     }
