@@ -1,5 +1,7 @@
 package leetcode.medium;
 
+import org.junit.Test;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,8 +35,10 @@ import java.util.Set;
  * @author nick
  * @date 2019-06-21 星期五 21:33
  **/
-public class LongestSubstring {
-    public static void main(String[] args) {
+public class Substring {
+
+    @Test
+    public void testLongestSubstring() {
         String str1st = "abcabcbb";
         int length1st = lengthOfLongestSubstringImprovement(str1st);
         System.out.println(length1st);

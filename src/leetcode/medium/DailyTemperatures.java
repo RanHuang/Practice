@@ -50,7 +50,7 @@ public class DailyTemperatures {
     }
 
     @Test
-    public void test() {
+    public void testDailyTemperatures() {
         Assert.assertTrue(Arrays.equals(new int[]{1, 1, 4, 2, 1, 1, 0, 0},
                 dailyTemperatures(new int[]{73, 74, 75, 71, 69, 72, 76, 73})));
         Assert.assertTrue(Arrays.equals(new int[]{3, 1, 1, 2, 1, 1, 0, 1, 1, 0},
