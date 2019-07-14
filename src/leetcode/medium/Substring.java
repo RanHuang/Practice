@@ -1,33 +1,35 @@
 package leetcode.medium;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
  * 给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。
- *
+ * <p>
  * 示例 1:
  * 输入: "abcabcbb"
  * 输出: 3
  * 解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
- *
+ * <p>
  * 示例 2:
  * 输入: "bbbbb"
  * 输出: 1
  * 解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。
- *
+ * <p>
  * 示例 3:
  * 输入: "pwwkew"
  * 输出: 3
  * 解释: 因为无重复字符的最长子串是 "wke"，所以其长度为 3。
- *
+ * <p>
  * 示例 4:
  * 输入: "au"
  * 输出: 2
  * 解释: 因为无重复字符的最长子串是 "au"，所以其长度为 2。
- *
+ * <p>
  * 来源：力扣（LeetCode）
  * 链接：https://leetcode-cn.com/problems/longest-substring-without-repeating-characters
  * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
@@ -54,8 +56,9 @@ public class Substring {
 
     /**
      * 改进算法：从前向后遍历字符串，将当前字符与不重复子串匹配：
-     *  1.遇到重复字符记为a， a...a, 则新的不重复子串为 ...a
-     *  2.如果未遇到重复字符，则不重复字串扩充一个字符
+     * 1.遇到重复字符记为a， a...a, 则新的不重复子串为 ...a
+     * 2.如果未遇到重复字符，则不重复字串扩充一个字符
+     *
      * @param s
      * @return
      */
@@ -87,6 +90,7 @@ public class Substring {
     /**
      * 暴力搜索：通过Set判断是否遇到重复字符，出现第一个重复字符之前的子串为
      * 无重复字符的子串
+     *
      * @param
      * @return
      */
@@ -114,5 +118,48 @@ public class Substring {
         }
 
         return maxLength;
+    }
+
+    @Test
+    public void testCountSubstrings() {
+        Assert.assertEquals(0, countSubstrings(""));
+        Assert.assertEquals(1, countSubstrings("a"));
+        Assert.assertEquals(3, countSubstrings("abc"));
+        Assert.assertEquals(6, countSubstrings("aaa"));
+    }
+
+
+    /**
+     * 中心扩展法
+     *
+     * @param s
+     * @return
+     */
+    public int countSubstrings(String s) {
+        if (Objects.isNull(s)) {
+            return 0;
+        }
+
+        int count = 0;
+        char[] chars = s.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            if (i < chars.length - 1) {
+                int count1 = segmentCount(chars, i, i + 1);
+                count += count1;
+            }
+            int count2 = segmentCount(chars, i, i);
+            count += count2;
+        }
+        return count;
+    }
+
+    private int segmentCount(char[] chars, int p, int q) {
+        int ret = 0;
+        while (p >= 0 && q < chars.length && chars[p] == chars[q]) {
+            ret++;
+            p--;
+            q++;
+        }
+        return ret;
     }
 }
