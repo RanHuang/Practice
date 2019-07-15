@@ -1,6 +1,8 @@
 package leetcode.simple;
 
 import leetcode.structure.ListNode;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 给定一个链表，判断链表中是否有环。
@@ -33,7 +35,8 @@ import leetcode.structure.ListNode;
  * 空间复杂度O(n)
  **/
 public class CycleLink {
-    public static void main(String[] args) {
+    @Test
+    public void testHasCycle() {
         ListNode list = createList();
         boolean hasCycle = hasCycle(list);
         System.out.println(hasCycle);
@@ -83,5 +86,51 @@ public class CycleLink {
         node3rd.next = node4th;
         node4th.next = node2nd;
         return node1st;
+    }
+
+    @Test
+    public void testDetectCycle() {
+        ListNode list = createList();
+        ListNode node = detectCycle(list);
+        Assert.assertEquals(2, node.val);
+    }
+
+    /**
+     * 142. 环形链表 II
+     * <p>
+     * Floyd 算法
+     *
+     * @param head
+     * @return
+     */
+    public ListNode detectCycle(ListNode head) {
+        if (head == null || head.next == null) {
+            // 空链表或仅含有一个节点的链表不为环形链表
+            return null;
+        }
+        // 环形链表判断转换为环形操场跑步的追击问题
+        // fast哨兵每次前进两步
+        ListNode fast = head.next;
+        // slow哨兵每次前进一步
+        ListNode slow = head;
+        // 如果存在环则fast会追上slow
+        while (fast != slow) {
+            slow = slow.next;
+
+            fast = fast.next;
+            if (fast == null || fast.next == null) {
+                return null;
+            }
+            fast = fast.next;
+        }
+
+        // 从头节点与相遇节点的下一个节点开始向后移动相同数量节点后相遇的节点即为入环点
+        ListNode p = head;
+        ListNode q = fast.next;
+        while (p != q) {
+            p = p.next;
+            q = q.next;
+        }
+        return q;
     }
 }
