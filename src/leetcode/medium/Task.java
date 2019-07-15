@@ -13,6 +13,46 @@ import java.util.Arrays;
  **/
 public class Task {
     /**
+     * 给定一个用字符数组表示的 CPU 需要执行的任务列表。其中包含使用大写的 A - Z 字母表示的26 种不同种类的任务。
+     * 任务可以以任意顺序执行，并且每个任务都可以在 1 个单位时间内执行完。CPU 在任何一个单位时间内都可以执行一个任务，
+     * 或者在待命状态。然而，两个相同种类的任务之间必须有长度为 n 的冷却时间，因此至少有连续 n 个单位时间内
+     * CPU 在执行不同的任务，或者在待命状态。你需要计算完成所有任务所需要的最短时间。
+     * 注：
+     * 任务的总个数为 [1, 10000]。
+     * n 的取值范围为 [0, 100]。
+     * <p>
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode-cn.com/problems/task-scheduler
+     * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+     *
+     * @param tasks
+     * @param n
+     * @return
+     */
+    public int leastInterval(char[] tasks, int n) {
+        // 任务类型总共只有26种
+        int[] taskCount = new int[26];
+        // 对各种类型任务数量进行统计
+        for (int i = 0; i < tasks.length; i++) {
+            int index = tasks[i] - 'A';
+            taskCount[index]++;
+        }
+        Arrays.sort(taskCount);
+
+        // 为满足时间间隔n，首先数量最多的任务数-1 * (n+1)
+        int interval = (taskCount[taskCount.length - 1] - 1) * (n + 1);
+        int i = taskCount.length - 1;
+        // 数量最多的任务数量不唯一，则追加
+        while (i >= 0 && taskCount[i--] == taskCount[taskCount.length - 1]) {
+            interval++;
+        }
+
+        // 经过上述算法统计的任务数量可能小于总任务数，e.g:无需待命填充时间
+        interval = Math.max(interval, tasks.length);
+        return interval;
+    }
+
+    /**
      * 输入: tasks = ["A","A","A","B","B","B"], n = 2
      * 输出: 8
      * 执行顺序: A -> B -> (待命) -> A -> B -> (待命) -> A -> B.
@@ -118,105 +158,4 @@ public class Task {
     }
 
 
-    /**
-     * 给定一个用字符数组表示的 CPU 需要执行的任务列表。其中包含使用大写的 A - Z 字母表示的26 种不同种类的任务。
-     * 任务可以以任意顺序执行，并且每个任务都可以在 1 个单位时间内执行完。CPU 在任何一个单位时间内都可以执行一个任务，
-     * 或者在待命状态。然而，两个相同种类的任务之间必须有长度为 n 的冷却时间，因此至少有连续 n 个单位时间内
-     * CPU 在执行不同的任务，或者在待命状态。你需要计算完成所有任务所需要的最短时间。
-     * 注：
-     * 任务的总个数为 [1, 10000]。
-     * n 的取值范围为 [0, 100]。
-     * <p>
-     * 来源：力扣（LeetCode）
-     * 链接：https://leetcode-cn.com/problems/task-scheduler
-     * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
-     *
-     * @param tasks
-     * @param n
-     * @return
-     */
-    public int leastInterval(char[] tasks, int n) {
-        int[] taskCount = new int[26];
-        for (int i = 0; i < tasks.length; i++) {
-            int index = tasks[i] - 'A';
-            taskCount[index]++;
-        }
-
-        int interval = 0;
-        if (n == 0) {
-            for (int i = 0; i < tasks.length; i++) {
-                interval += taskCount[i];
-            }
-            return interval;
-        }
-
-        taskCount = this.validTaskCount(taskCount);
-        this.reversedSort(taskCount);
-
-        while (taskCount.length > n && taskCount[0] > 1) {
-            interval += n + 1;
-            for (int j = 0; j < n + 1; j++) {
-                taskCount[j]--;
-            }
-            taskCount = this.validTaskCount(taskCount);
-            this.reversedSort(taskCount);
-        }
-
-        while (taskCount[0] > 1) {
-            interval += n + 1;
-            for (int j = 0; j < taskCount.length; j++) {
-                taskCount[j]--;
-            }
-            taskCount = this.validTaskCount(taskCount);
-            this.reversedSort(taskCount);
-        }
-
-        interval += taskCount.length;
-
-        return interval;
-
-    }
-
-    /**
-     * 返回数值不为0的数组
-     *
-     * @param taskCount
-     * @return
-     */
-    private int[] validTaskCount(int[] taskCount) {
-        // 不为0的有效数字数量
-        int length = -1;
-        for (int i = 0; i < taskCount.length; i++) {
-            if (taskCount[i] == 0) {
-                length = i;
-                break;
-            }
-        }
-        // 序列中所有数字均不为0
-        if (length < 0) {
-            length = taskCount.length;
-        }
-        int[] validTaskCount = new int[length];
-        System.arraycopy(taskCount, 0, validTaskCount, 0, length);
-
-        return validTaskCount;
-    }
-
-    /**
-     * 逆序排列数组
-     *
-     * @param nums
-     */
-    private void reversedSort(int[] nums) {
-        Arrays.sort(nums);
-        int i = 0;
-        int j = nums.length - 1;
-        while (i < j) {
-            int tmp = nums[i];
-            nums[i] = nums[j];
-            nums[j] = tmp;
-            i++;
-            j--;
-        }
-    }
 }
