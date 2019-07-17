@@ -3,6 +3,8 @@ package leetcode.medium.dp;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 /**
  * 300. 最长上升子序列
  * <p>
@@ -59,5 +61,70 @@ public class LengthOfLIS {
             }
         }
         return max;
+    }
+
+    @Test
+    public void testLengthOfLCS() {
+        int nums[] = {10, 9, 2, 5, 3, 7, 101, 18};
+        int sortedNums[] = Arrays.copyOf(nums, nums.length);
+        Arrays.sort(sortedNums);
+        int length = lengthOfLCS(nums, sortedNums);
+        Assert.assertEquals(4, length);
+    }
+
+    @Test
+    public void testLengthOfLISByLCS() {
+        Assert.assertEquals(2, lengthOfLISByLCS(new int[]{-2, -1}));
+        Assert.assertEquals(0, lengthOfLISByLCS(new int[]{}));
+        Assert.assertEquals(4, lengthOfLISByLCS(new int[]{10, 9, 2, 5, 3, 7, 101, 18}));
+    }
+
+    /**
+     * 将输入序列进行排序，问题转化为求原序列与排序序列的最长公共子序列
+     * 前提条件：输入序列排序不存在相同的元素
+     *
+     * @param nums
+     * @return
+     */
+    public int lengthOfLISByLCS(int[] nums) {
+        if (nums.length == 0) {
+            return 0;
+        }
+        int sortedNums[] = Arrays.copyOf(nums, nums.length);
+        Arrays.sort(sortedNums);
+        int length = lengthOfLCS(nums, sortedNums);
+        return length;
+    }
+
+    /**
+     * 求解最长公共子序列
+     *
+     * @param A
+     * @param B
+     * @return
+     */
+    public int lengthOfLCS(int[] A, int[] B) {
+        // 备忘录数组
+        int table[][] = new int[A.length + 1][B.length + 1];
+
+        // 初始化
+        for (int i = 0; i <= A.length; i++) {
+            table[i][B.length] = 0;
+        }
+        for (int j = 0; j <= B.length; j++) {
+            table[0][A.length] = 0;
+        }
+
+        for (int i = A.length - 1; i >= 0; i--) {
+            for (int j = B.length - 1; j >= 0; j--) {
+                if (A[i] == B[j]) {
+                    table[i][j] = table[i + 1][j + 1] + 1;
+                } else {
+                    table[i][j] = Math.max(table[i][j + 1], table[i + 1][j]);
+                }
+
+            }
+        }
+        return table[0][0];
     }
 }
