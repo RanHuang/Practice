@@ -18,6 +18,78 @@ import java.util.Arrays;
  **/
 public class SortList {
     @Test
+    public void testSortListBinary() {
+        Assert.assertTrue(Arrays.equals(new int[]{-1, 0, 3, 4, 5}, ListNode.toArray(this.sortListBinary(ListNode.createList(new int[]{-1, 5, 3, 4, 0})))));
+        Assert.assertTrue(Arrays.equals(new int[]{-1, 0, 3, 4, 5, 6}, ListNode.toArray(this.sortListBinary(ListNode.createList(new int[]{6, -1, 5, 3, 4, 0})))));
+        Assert.assertTrue(Arrays.equals(new int[]{1, 2, 3, 4}, ListNode.toArray(this.sortListBinary(ListNode.createList(new int[]{4, 2, 1, 3})))));
+        Assert.assertTrue(Arrays.equals(new int[]{1, 2, 3, 4}, ListNode.toArray(this.sortListBinary(ListNode.createList(new int[]{1, 2, 3, 4})))));
+        Assert.assertTrue(Arrays.equals(new int[]{-1, 6}, ListNode.toArray(this.sortListBinary(ListNode.createList(new int[]{-1, 6})))));
+    }
+
+    public ListNode sortListBinary(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode sorted = this.listBinarySort(head);
+        return sorted;
+    }
+
+    /**
+     * 采用类似归并排序的思路
+     * 先分割链表然后通过合并操作转换为有序链表
+     *
+     * @param start
+     * @return
+     */
+    private ListNode listBinarySort(ListNode start) {
+        // 第归终止条件
+        if (start == null || start.next == null) {
+            return start;
+        }
+        // Partition
+        ListNode slow = start;
+        ListNode fast = start.next;
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        ListNode first = start;
+        ListNode second = slow.next;
+        slow.next = null;
+        // recursive
+        ListNode sortedFirst = this.listBinarySort(first);
+        ListNode sortedSecond = this.listBinarySort(second);
+        // Merge
+        ListNode merged = null;
+        ListNode pre = null;
+        ListNode cur;
+        while (sortedFirst != null && sortedSecond != null) {
+            if (sortedFirst.val <= sortedSecond.val) {
+                cur = sortedFirst;
+                sortedFirst = sortedFirst.next;
+            } else {
+                cur = sortedSecond;
+                sortedSecond = sortedSecond.next;
+            }
+            if (merged == null) {
+                merged = cur;
+            } else {
+                pre.next = cur;
+            }
+            pre = cur;
+        }
+        if (sortedFirst != null) {
+            pre.next = sortedFirst;
+        }
+        if (sortedSecond != null) {
+            pre.next = sortedSecond;
+        }
+        return merged;
+    }
+
+
+    @Test
     public void testSortList() {
         Assert.assertTrue(Arrays.equals(new int[]{-1, 0, 3, 4, 5}, ListNode.toArray(this.sortList(ListNode.createList(new int[]{-1, 5, 3, 4, 0})))));
         Assert.assertTrue(Arrays.equals(new int[]{-1, 0, 3, 4, 5, 6}, ListNode.toArray(this.sortList(ListNode.createList(new int[]{6, -1, 5, 3, 4, 0})))));
