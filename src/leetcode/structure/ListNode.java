@@ -36,6 +36,26 @@ public class ListNode {
         System.out.println(sb.toString());
     }
 
+    public static int[] toArray(ListNode listNode) {
+        if (listNode == null) {
+            return new int[0];
+        }
+        int count = 0;
+        ListNode p = listNode;
+        while (p != null) {
+            count++;
+            p = p.next;
+        }
+        int[] values = new int[count];
+        p = listNode;
+        count = 0;
+        while (p != null) {
+            values[count++] = p.val;
+            p = p.next;
+        }
+        return values;
+    }
+
     public static ListNode createList(int[] vals) {
         if (null == vals || vals.length == 0) {
             return null;

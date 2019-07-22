@@ -1,7 +1,10 @@
 package leetcode.medium;
 
 import leetcode.structure.ListNode;
+import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.Arrays;
 
 /**
  * 148. 排序链表
@@ -16,14 +19,11 @@ import org.junit.Test;
 public class SortList {
     @Test
     public void testSortList() {
-        int[] nums = {-1, 5, 3, 4, 0};
-        //int[] nums = {-1, 6};
-        //int[] nums = {6, -1, 5, 3, 4, 0};
-        //int[] nums = {4, 2, 1, 3};
-        //int[] nums = {1, 2, 3, 4};
-        ListNode origin = ListNode.createList(nums);
-        ListNode sortedList = this.sortList(origin);
-        ListNode.printList(sortedList);
+        Assert.assertTrue(Arrays.equals(new int[]{-1, 0, 3, 4, 5}, ListNode.toArray(this.sortList(ListNode.createList(new int[]{-1, 5, 3, 4, 0})))));
+        Assert.assertTrue(Arrays.equals(new int[]{-1, 0, 3, 4, 5, 6}, ListNode.toArray(this.sortList(ListNode.createList(new int[]{6, -1, 5, 3, 4, 0})))));
+        Assert.assertTrue(Arrays.equals(new int[]{1, 2, 3, 4}, ListNode.toArray(this.sortList(ListNode.createList(new int[]{4, 2, 1, 3})))));
+        Assert.assertTrue(Arrays.equals(new int[]{1, 2, 3, 4}, ListNode.toArray(this.sortList(ListNode.createList(new int[]{1, 2, 3, 4})))));
+        Assert.assertTrue(Arrays.equals(new int[]{-1, 6}, ListNode.toArray(this.sortList(ListNode.createList(new int[]{-1, 6})))));
     }
 
     /**
