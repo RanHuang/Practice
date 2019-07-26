@@ -9,7 +9,7 @@ import java.util.Scanner;
  * 链接：https://ac.nowcoder.com/acm/problem/21302
  * 来源：牛客网
  * <p>
- *     被3整除的子序列
+ * 被3整除的子序列
  * 给你一个长度为50的数字串,问你有多少个子序列构成的数字可以被3整除
  * 答案对1e9+7取模
  * 输入描述: 输入一个字符串，由数字构成，长度小于等于50
@@ -19,8 +19,7 @@ import java.util.Scanner;
  **/
 public class Main {
     public static void main(String[] args) {
-        Main main = new Main();
-
+        // 输入
         Scanner scanner = new Scanner(System.in);
         //获取输入的字符串
         String str = scanner.nextLine();
@@ -31,11 +30,15 @@ public class Main {
             vals[i] = Integer.parseInt(strings[i]);
         }
 
-        int count = main.numberOfSub(vals);
+        // 调用实现方法
+        Main main = new Main();
+        int count = main.function(vals);
+
+        // 输出
         System.out.println(count);
     }
 
-    public int numberOfSub(int[] vals) {
+    public int function(int[] vals) {
         if (null == vals || vals.length == 0) {
             return 0;
         }
@@ -71,10 +74,10 @@ public class Main {
 
     @Test
     public void testNumberOfSubString() {
-        Assert.assertEquals(3, this.numberOfSub(new int[]{1, 3, 2}));
-        Assert.assertEquals(7, this.numberOfSub(new int[]{3, 3, 3}));
-        Assert.assertEquals(3, this.numberOfSub(new int[]{0, 0}));
-        Assert.assertEquals(1, this.numberOfSub(new int[]{9}));
-        Assert.assertEquals(23, this.numberOfSub(new int[]{1, 2, 3, 4, 5, 6}));
+        Assert.assertEquals(3, this.function(new int[]{1, 3, 2}));
+        Assert.assertEquals(7, this.function(new int[]{3, 3, 3}));
+        Assert.assertEquals(3, this.function(new int[]{0, 0}));
+        Assert.assertEquals(1, this.function(new int[]{9}));
+        Assert.assertEquals(23, this.function(new int[]{1, 2, 3, 4, 5, 6}));
     }
 }
