@@ -33,8 +33,12 @@ public class TreeNode {
         }
 
         for (int i = 0; i < treeNodes.length / 2; i++) {
-            treeNodes[i].left = treeNodes[2 * i + 1];
-            treeNodes[i].right = treeNodes[2 * i + 2];
+            if (2 * i + 1 < treeNodes.length) {
+                treeNodes[i].left = treeNodes[2 * i + 1];
+            }
+            if (2 * i + 2 < treeNodes.length) {
+                treeNodes[i].right = treeNodes[2 * i + 2];
+            }
         }
         return treeNodes[0];
     }
