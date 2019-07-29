@@ -27,6 +27,13 @@ public class CoinChange {
         Assert.assertEquals(0, this.coinChange(new int[]{1}, 0));
     }
 
+    /**
+     * 动态规划法，状态转移方程: d[j] = min(d[j-coins[k]]) + 1,其中0<=j<=amount, 0<=k<coins.length
+     *
+     * @param coins
+     * @param amount
+     * @return
+     */
     public int coinChange(int[] coins, int amount) {
         int[] d = new int[amount + 1];
         Arrays.fill(d, -1);
