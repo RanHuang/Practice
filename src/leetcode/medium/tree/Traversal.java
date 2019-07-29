@@ -3,6 +3,9 @@ package leetcode.medium.tree;
 import leetcode.structure.TreeNode;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 105. 从前序与中序遍历序列构造二叉树
  *
@@ -64,4 +67,29 @@ public class Traversal {
         }
         return -1;
     }
+
+
+    /**
+     * 94. 二叉树的中序遍历
+     * 给定一个二叉树，返回它的中序 遍历。
+     *
+     * @param root
+     * @return
+     */
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> inorderList = new ArrayList<>();
+        this.inorder(root, inorderList);
+        return inorderList;
+    }
+
+    private void inorder(TreeNode root, List<Integer> result) {
+        if (root == null) {
+            return;
+        }
+
+        this.inorder(root.left, result);
+        result.add(root.val);
+        this.inorder(root.right, result);
+    }
+
 }
