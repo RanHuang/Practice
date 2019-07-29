@@ -4,7 +4,10 @@ import leetcode.structure.TreeNode;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * 236. 二叉树的最近公共祖先
@@ -62,6 +65,16 @@ public class LowestCommonAncestor {
         Assert.assertEquals(3, lowestCommonAncestor2.val);
     }
 
+    /**
+     * 首先通过遍历构建父子结点关系，通过Map存储 当前结点->父结点关系
+     * 然后通过遍历分别获取p,q结点，然后根据父子结点关系构建从根结点到当前结点的路径
+     * 通过从根结点的迭代遍历，获取最后一个公共父结点
+     *
+     * @param root
+     * @param p
+     * @param q
+     * @return
+     */
     public TreeNode lowestCommonAncestorWithParent(TreeNode root, TreeNode p, TreeNode q) {
         Map<TreeNode, TreeNode> parentMap = new HashMap<>();
         this.preOrderForParent(null, root, parentMap);
