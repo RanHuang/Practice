@@ -10,9 +10,20 @@ import java.util.Arrays;
  * 给定不同面额的硬币 coins 和一个总金额 amount。
  * 编写一个函数来计算可以凑成总金额所需的最少的硬币个数。
  * 如果没有任何一种硬币组合能组成总金额，返回 -1。
- * <p>
  * 来源：力扣（LeetCode）
  * 链接：https://leetcode-cn.com/problems/coin-change
+ * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+ * <p>
+ * 518. 零钱兑换 II
+ * 给定不同面额的硬币和一个总金额。写出函数来计算可以凑成总金额的硬币组合数。假设每一种面额的硬币有无限个。
+ * 你可以假设：
+ * 0 <= amount (总金额) <= 5000
+ * 1 <= coin (硬币面额) <= 5000
+ * 硬币种类不超过 500 种
+ * 结果符合 32 位符号整数
+ * <p>
+ * 来源：力扣（LeetCode）
+ * 链接：https://leetcode-cn.com/problems/coin-change-2
  * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
  *
  * @author nick
@@ -50,5 +61,46 @@ public class CoinChange {
         }
 
         return d[amount] >= 0 ? d[amount] : -1;
+    }
+
+    @Test
+    public void testChange() {
+        int[] coins = {1, 2, 5};
+        int amount = 5;
+        Assert.assertEquals(4, this.change(amount, coins));
+    }
+
+    static int amount = 0;
+
+    /**
+     * @param amount
+     * @param coins
+     * @return
+     */
+    public int change(int amount, int[] coins) {
+        this.changeBackTrack(amount, coins);
+        return amount;
+    }
+
+
+
+    /**
+     * 使用回溯方法(存在重复方案)
+     *
+     * @param left
+     * @param coins
+     * @return
+     */
+    private void changeBackTrack(int left, int[] coins) {
+        if (left < 0) {
+            return;
+        } else if (left == 0) {
+            amount++;
+            return;
+        }
+
+        for (int i = 0; i < coins.length; i++) {
+            this.changeBackTrack(left - coins[i], coins);
+        }
     }
 }
