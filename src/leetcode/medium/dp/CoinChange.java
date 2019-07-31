@@ -70,37 +70,28 @@ public class CoinChange {
         Assert.assertEquals(4, this.change(amount, coins));
     }
 
-    static int amount = 0;
 
     /**
+     * 采用动态规划法（思路非常巧妙，很难想到）
+     * 逐个增加硬币的种类，递推计算能达到的数额的方案数量
+     *
      * @param amount
      * @param coins
      * @return
      */
     public int change(int amount, int[] coins) {
-        this.changeBackTrack(amount, coins);
-        return amount;
-    }
+        int dp[] = new int[amount + 1];
+        // 初始化
+        dp[0] = 1;
 
-
-
-    /**
-     * 使用回溯方法(存在重复方案)
-     *
-     * @param left
-     * @param coins
-     * @return
-     */
-    private void changeBackTrack(int left, int[] coins) {
-        if (left < 0) {
-            return;
-        } else if (left == 0) {
-            amount++;
-            return;
-        }
-
+        //
         for (int i = 0; i < coins.length; i++) {
-            this.changeBackTrack(left - coins[i], coins);
+            for (int j = coins[i]; j <= amount; j++) {
+                dp[j] += dp[j - coins[i]];
+            }
         }
+
+        return dp[amount];
     }
+
 }
