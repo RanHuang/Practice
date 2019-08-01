@@ -13,14 +13,19 @@ import org.junit.Test;
  **/
 public class FindNumberOfLIS {
     @Test
-    public void test() {
-        Assert.assertEquals(1, this.findNumberOfLIS(new int[]{1}));
-        Assert.assertEquals(0, this.findNumberOfLIS(new int[]{2, 2, 2, 2, 2}));
-        Assert.assertEquals(0, this.findNumberOfLIS(new int[]{1, 3, 5, 4, 7}));
-
+    public void testLengthOfLIS() {
+        Assert.assertEquals(1, this.lengthOfLIS(new int[]{1}));
+        Assert.assertEquals(1, this.lengthOfLIS(new int[]{2, 2, 2, 2, 2}));
+        Assert.assertEquals(4, this.lengthOfLIS(new int[]{1, 3, 5, 4, 7}));
     }
 
-    public int findNumberOfLIS(int[] nums) {
+    /**
+     * 求取最长递增子序列的长度
+     *
+     * @param nums
+     * @return
+     */
+    public int lengthOfLIS(int[] nums) {
         if (nums == null) {
             return 0;
         }
@@ -49,16 +54,17 @@ public class FindNumberOfLIS {
                 dp[i][j] = max;
             }
         }
+        return dp[0][length - 1];
+    }
 
-        // 最长子序列长度
-        int LIS = Integer.MIN_VALUE;
-        for (int i = 0; i < length; i++) {
-            for (int j = i; j < length; j++) {
-                if (LIS < dp[i][j]) {
-                    LIS = dp[i][j];
-                }
-            }
-        }
+    @Test
+    public void testFindNumberOfLIS() {
+        Assert.assertEquals(1, this.findNumberOfLIS(new int[]{1}));
+        Assert.assertEquals(1, this.findNumberOfLIS(new int[]{2, 2, 2, 2, 2}));
+        Assert.assertEquals(4, this.findNumberOfLIS(new int[]{1, 3, 5, 4, 7}));
+    }
+
+    public int findNumberOfLIS(int[] nums) {
 
         int cnt = 0;
         return cnt;
