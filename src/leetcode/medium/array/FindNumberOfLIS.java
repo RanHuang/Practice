@@ -60,13 +60,50 @@ public class FindNumberOfLIS {
     @Test
     public void testFindNumberOfLIS() {
         Assert.assertEquals(1, this.findNumberOfLIS(new int[]{1}));
-        Assert.assertEquals(1, this.findNumberOfLIS(new int[]{2, 2, 2, 2, 2}));
-        Assert.assertEquals(4, this.findNumberOfLIS(new int[]{1, 3, 5, 4, 7}));
+        Assert.assertEquals(5, this.findNumberOfLIS(new int[]{2, 2, 2, 2, 2}));
+        Assert.assertEquals(2, this.findNumberOfLIS(new int[]{1, 3, 5, 4, 7}));
     }
 
     public int findNumberOfLIS(int[] nums) {
+        if (nums == null) {
+            return 0;
+        }
+        int length = nums.length;
+        if (length < 2) {
+            return length;
+        }
 
-        int cnt = 0;
-        return cnt;
+        int[] dp = new int[length];
+        int[] cnt = new int[length];
+        for (int i = 0; i < length; i++) {
+            dp[i] = 1;
+            cnt[i] = 1;
+        }
+
+        for (int i = 1; i < length; i++) {
+            for (int j = 0; j < i; j++) {
+                if (nums[j] < nums[i]) {
+                    if (dp[j] + 1 > dp[i]) {
+                        dp[i] = dp[j] + 1;
+                        cnt[i] = cnt[j];
+                    } else if (dp[j] + 1 == dp[i]) {
+                        cnt[i] += cnt[j];
+                    }
+                }
+            }
+        }
+
+        int LIS = Integer.MIN_VALUE;
+        int total = 0;
+        for (int i = 0; i < length; i++) {
+            if (LIS < dp[i]) {
+                LIS = dp[i];
+                total = cnt[i];
+            } else if (LIS == dp[i]) {
+                total += cnt[i];
+            }
+        }
+
+        return total;
     }
 }
