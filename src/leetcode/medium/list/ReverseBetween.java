@@ -35,9 +35,11 @@ public class ReverseBetween {
         ListNode current = head;
         ListNode after = current.next;
         int index = 0;
+        // 遍历整个链表
         while (current != null) {
             index++;
 
+            // 遍历至m,n结点时单独处理三段链表的首尾指针
             if (index == m) {
                 tail1st = pre;
                 tail2nd = current;
