@@ -43,6 +43,10 @@ public class TreeNode {
         return treeNodes[0];
     }
 
+    /**
+     * 根据前序遍历输出二叉树中的结点值
+     * @param root
+     */
     public static void showTreeNodeVal(TreeNode root) {
         List<String> result = new LinkedList<>();
         preorderTraversal(root, result);
