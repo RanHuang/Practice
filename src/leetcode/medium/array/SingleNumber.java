@@ -3,8 +3,8 @@ package leetcode.medium.array;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 137. 只出现一次的数字 II
@@ -21,17 +21,20 @@ import java.util.Map;
  **/
 public class SingleNumber {
     public int singleNumber(int[] nums) {
-        Map<Integer, Integer> countMap = new HashMap<>();
+        Set<Integer> valSet = new HashSet<>();
+        int sum = 0;
         for (int i = 0; i < nums.length; i++) {
-            countMap.put(nums[i], countMap.getOrDefault(nums[i], 0) + 1);
+            valSet.add(nums[i]);
+            sum += nums[i];
         }
 
-        for (Map.Entry<Integer, Integer> entry : countMap.entrySet()) {
-            if (entry.getValue() == 1) {
-                return entry.getKey();
-            }
+        int sum3 = 0;
+        for (Integer val : valSet) {
+            sum3 += val;
         }
-        return Integer.MAX_VALUE;
+        sum3 = sum3 * 3;
+
+        return (sum3 - sum) / 2;
     }
 
     @Test
