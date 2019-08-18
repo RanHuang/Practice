@@ -15,13 +15,5 @@ newton_raphson_method.py
     e.g: 求解方程的近似根
     寻找x，满足 x**2 - n 在(0, epsilon)
 
-Directory: itcpup
-    Introduction to Computation and Programming Using Python
-
-Directory: pnpc
-    Python Network Programming Cookbook
-    《Python 网络编程攻略》
-
-Directory: basicPython
-    Beginning Python
-    《Python基础教程》
+Directory: crazyPython
+    《疯狂Python讲义》
