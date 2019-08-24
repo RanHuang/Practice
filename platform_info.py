@@ -9,24 +9,24 @@ import platform
 
 def showPlatformInfo():
     pythonVersion = platform.python_version()
-    print "Current python version is %s"% (pythonVersion)
+    print("Current python version is %s"% (pythonVersion))
 
     uname = platform.uname()
-    print "uname: ", uname
+    print("uname: ", uname)
 
     arch = platform.architecture()
-    print "Architecture: ", arch
+    print("Architecture: ", arch)
 
     machine = platform.machine()
-    print "Machine: ", machine
+    print("Machine: ", machine)
 
     node = platform.node()
-    print "Node: ", node
+    print("Node: ", node)
 
-    print "PlatformInfo: ", platform.platform()
-    print "Processor: ", platform.processor()
-    print "System: ", platform.system()
-    print "Version: ", platform.version()
+    print("PlatformInfo: ", platform.platform())
+    print("Processor: ", platform.processor())
+    print("System: ", platform.system())
+    print("Version: ", platform.version())
 
 if __name__ == '__main__':
     showPlatformInfo()
