@@ -1,0 +1,15 @@
+#!/bin/bash
+# count the number of files in PATH
+paths=$(echo $PATH | sed 's/:/ /g')
+# echo $paths
+
+for directory in $paths
+do
+  count=0
+  files=$(ls $directory)
+  for file in $files
+  do 
+    count=$[ $count + 1 ]
+  done
+  echo "$directory -- $count"
+done  
