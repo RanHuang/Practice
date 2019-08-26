@@ -1,0 +1,26 @@
+1. Install docker service
+$ sudo apt-get install curl
+$ curl -sSL https://get.docker.com/ | sh
+2. Add user to group Docker
+$ sudo usermod -aG docker nick
+
+Q1;
+$ docker version 
+Client: Docker Engine - Community
+ Version:           19.03.1
+ API version:       1.40
+ Go version:        go1.12.5
+ Git commit:        74b1e89
+ Built:             Thu Jul 25 21:21:24 2019
+ OS/Arch:           linux/amd64
+ Experimental:      false
+Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get http://%2Fvar%2Frun%2Fdocker.sock/v1.40/version: dial unix /var/run/docker.sock: connect: permission denied
+A1:
+使用sudo权限运行docker命令;
+创建docker用户组,并将当前用户加入docker用户组
+
+sudo groupadd docker     #添加docker用户组
+sudo gpasswd -a $USER docker     #将登陆用户加入到docker用户组中
+newgrp docker     #更新用户组
+docker ps    #测试docker命令是否可以使用sudo正常使用
+
