@@ -1,0 +1,21 @@
+1. 下载Go工具文件包
+e.g: go1.12.9 
+$ wget https://dl.google.com/go/go1.12.9.linux-amd64.tar.gz
+$ sha256sum go1.12.9.linux-amd64.tar.gz 
+2. 解压文件包至/usr/local
+$ sudo su
+# tar -C /usr/local/ -zxvf go1.12.9.linux-amd64.tar.gz
+3. 将go工具路径增加到环境变量PATH中
+$ vim .bashrc
+  export PATH=$PATH:/usr/local/go/bin
+$ source .bashrc
+
+4. 查看go版本
+$ go version
+go version go1.12.9 linux/amd64
+
+5. 编写并运行hello world示例程序
+$ go build hello.go
+$ ./hello 
+Hello, World!
+
