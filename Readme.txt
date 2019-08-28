@@ -17,3 +17,5 @@ newton_raphson_method.py
 
 Directory: crazyPython
     《疯狂Python讲义》
+Directory: deepLearningFromScratch
+    《深度学习入门 基于Python的理论与实现》
