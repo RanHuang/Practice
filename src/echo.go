@@ -3,6 +3,7 @@ package main
 import (
     "fmt"
     "os"
+    "strings"
 )
 
 func main() {
@@ -12,4 +13,6 @@ func main() {
 	sep = ","
     }
     fmt.Println(s)
+
+    fmt.Println(strings.Join(os.Args[1:], ", "))
 }
