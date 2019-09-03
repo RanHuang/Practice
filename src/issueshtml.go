@@ -1,5 +1,5 @@
 /*
-以Html模板输出issues
+以Html模板输出issues, 《The Go Programming Language》P89
 Example: $ ./issueshtml repo:golang/go is:open json decoder > issues.html
 */
 package main

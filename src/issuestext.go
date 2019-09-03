@@ -1,5 +1,5 @@
 /*
-以Text模板输出issues
+以Text模板输出issues, 《The Go Programming Language》P87
 Example: $ ./issuestext repo:golang/go is:open json decoder
 */
 package main
