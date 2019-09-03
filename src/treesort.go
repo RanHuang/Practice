@@ -1,4 +1,4 @@
-// 利用二叉树实现插入排序
+// 利用二叉树实现插入排序, 《The Go Programming Language》P77
 package main
 import (
     "fmt"
