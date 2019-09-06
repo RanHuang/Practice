@@ -5,3 +5,6 @@
     https://golang.org/
 # Go语言中文网
     https://studygolang.com/
+# 《The Go Programming Language》
+    Website: http://www.gopl.io/
+    SourceCode: https://github.com/adonovan/gopl.io.git
