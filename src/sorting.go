@@ -41,9 +41,11 @@ func printTracks(tracks []*Track) {
 }
 
 type byArtist []*Track
+// 实现sort.Interface接口的方法
 func (x byArtist) Len() int { return len(x) }
 func (x byArtist) Less(i, j int) bool { return x[i].Artist < x[j].Artist }
 func (x byArtist) Swap(i, j int) { x[i], x[j] = x[j], x[i] }
+
 func main() {
     fmt.Println("*****Origin Data******")
     printTracks(tracks)
