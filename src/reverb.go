@@ -1,14 +1,15 @@
 /*
-*时钟服务器，每秒一次的频率向客户端发送当前时间, 《The Go Programming Language》P171
-* Server: $ ./clock
-* Client: $ nc localhost 8000   |   $ ./netcatclock
+*回声服务器，《The Go Programming Language》P174
+* Server: $ ./reverb
 */
 package main
 import(
+    "fmt"
+    "strings"
     "net"
     "time"
-    "io"
     "log"
+    "bufio"
 )
 
 func main() {
@@ -30,13 +31,16 @@ func main() {
 
 func handleConnection(c net.Conn) {
     defer c.Close()
-    for {
-        _, err := io.WriteString(c, time.Now().Format("15:04:05\n"))
-        if err != nil {
-            // 写入失败时结束循环，可能由于客户端断开链接
-            return
-        }
-        // 间隔1秒
-        time.Sleep(1 * time.Second)
+    input := bufio.NewScanner(c)
+    for input.Scan() {
+        go echo(c, input.Text(), 1*time.Second)
     }
+}
+
+func echo(c net.Conn, s string, delay time.Duration) {
+    fmt.Fprintln(c, "\t", strings.ToUpper(s))
+    time.Sleep(delay)
+    fmt.Fprintln(c, "\t", s)
+    time.Sleep(delay)
+    fmt.Fprintln(c, "\t", strings.ToLower(s))
 }
