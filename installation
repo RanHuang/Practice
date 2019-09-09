@@ -19,3 +19,7 @@ $ go build hello.go
 $ ./hello 
 Hello, World!
 
+5.安装golang.org/x/net依赖包
+$ mkdir -p $GOPATH/src/golang.org/x
+$ cd $GOPATH/src/golang.org/x/
+$ git clone https://github.com/golang/net.git
