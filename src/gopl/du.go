@@ -9,7 +9,10 @@ import(
     "flag"
     "io/ioutil"
     "path/filepath"
+    "time"
 )
+
+var verbose = flag.Bool("v", false, "show verbose progress messages")
 
 func main() {
     // 确定起始目录
@@ -29,11 +32,27 @@ func main() {
     }()
 
     //
-    var nfiles, nbytes int64 
-    for size := range fileSize {
-        nfiles++
-        nbytes += size
+    var tick <-chan time.Time
+    if *verbose {
+        tick = time.Tick(200 * time.Millisecond)
     }
+    
+    var nfiles, nbytes int64 
+    loop:
+    for {
+        select {
+            case size, ok := <-fileSize:
+                if ok {
+                    nfiles++
+                    nbytes += size
+                } else {
+                    break loop
+                }
+            case <-tick:
+                fmt.Printf("%d files  %.1f GB\n", nfiles, float64(nbytes)/1e9)
+        }
+    }
+
     fmt.Printf("%d files  %.1f GB\n", nfiles, float64(nbytes)/1e9)
 }
 // 返回dir目录中条目
