@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
     Author: Nick Huang
@@ -6,10 +5,13 @@
     Description:
 """
 import platform
+import sys
 
 def showPlatformInfo():
     pythonVersion = platform.python_version()
     print("Current python version is %s"% (pythonVersion))
+    
+    print("Sys Version: %s" % sys.version)
 
     uname = platform.uname()
     print("uname: ", uname)
