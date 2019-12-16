@@ -1,0 +1,13 @@
+#!/bin/bash
+
+tmp_files=`bin/hdfs dfs -ls hdfs://10.244.4.210:9000/data/kafka_dump/20191028/19_* 2>/dev/null`
+echo $tmp_files
+echo ${#tmp_files[*]}
+# ls 命令在批评不到文件时依然会返回长度不为0的数组
+if [ ${#tmp_files[@]} -gt 0 ] && [ -z ${tmp_files[0]} ]; then
+    echo "No matched files"
+else
+    echo "file matched"
+fi
+
+echo "done"

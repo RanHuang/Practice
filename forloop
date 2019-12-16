@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# 遍历区间为[start, end],包括首尾元素
+for i in `seq 0 2`
+do
+    echo $i
+done
