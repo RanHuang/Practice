@@ -1,0 +1,50 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+    # 设定默认登录账户
+    config.ssh.username = "root"
+    # 每台虚拟机使用相同的ssh密钥
+    config.ssh.insert_key = false
+    # 每台虚拟机使用相同的镜像
+    config.vm.box = "debian/stretch64"
+
+    config.vm.define "debian6" do | debian6 |
+        debian6.vm.network "private_network", ip: "192.168.0.6"
+        config.vm.provider "virtualbox" do |vb|
+            vb.memory = "2048"
+            vb.cpus = 2
+        end
+    end
+
+    config.vm.define "debian16" do | debian16 |
+        debian16.vm.network "private_network", ip: "192.168.0.16"
+        config.vm.provider "virtualbox" do |vb|
+            vb.memory = "2048"
+            vb.cpus = 2
+        end
+    end
+
+    config.vm.define "debian26" do | debian26 |
+        debian26.vm.network "private_network", ip: "192.168.0.26"
+        config.vm.provider "virtualbox" do |vb|
+            vb.memory = "2048"
+            vb.cpus = 2
+        end
+    end  
+
+    config.vm.provision "shell", inline: <<-SHELL
+        # 配置免密登录root账户
+        sudo su
+        mkdir -p /root/.ssh
+        cp /home/vagrant/.ssh/authorized_keys /root/.ssh/
+
+        # 设置命令别名
+        echo "alias ll='ls -lh'" >> /etc/profile
+
+        # 安装工具软件
+        apt-get update
+        apt-get install -y vim htop net-tools tree
+  SHELL
+end
+
