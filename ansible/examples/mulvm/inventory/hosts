@@ -1,0 +1,6 @@
+vagrant0 ansible_host=127.0.0.1 ansible_port=2222
+vagrant1 ansible_host=127.0.0.1 ansible_port=2200
+vagrant2 ansible_host=127.0.0.1 ansible_port=2201
+
+[vm]
+vagrant[0:2]

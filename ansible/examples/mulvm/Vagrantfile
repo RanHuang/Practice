@@ -1,0 +1,25 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+    # 每台虚拟机使用相同的ssh密钥
+    config.ssh.insert_key = false
+
+    config.vm.define "debian0" do | debian0 |
+        debian0.vm.box = "debian/stretch64"
+        debian0.vm.network "forwarded_port", guest: 80, host: 8080
+        debian0.vm.network "forwarded_port", guest: 443, host: 8443
+    end
+
+    config.vm.define "debian1" do | debian1 |
+        debian1.vm.box = "debian/stretch64"
+        debian1.vm.network "forwarded_port", guest: 80, host:8180
+        debian1.vm.network "forwarded_port", guest: 443, host:18443
+    end  
+
+    config.vm.define "debian2" do | debian2 |
+        debian2.vm.box = "debian/stretch64"
+        debian2.vm.network "forwarded_port", guest: 80, host:8280
+        debian2.vm.network "forwarded_port", guest: 443, host:28443
+    end
+end

@@ -1,0 +1,12 @@
+debian  ansible_host=127.0.0.1 ansible_port=2222 
+
+devbox ansible_ssh_host=10.227.14.105 ansible_ssh_port=22 ansible_ssh_user=huangran.nick ansible_ssh_private_key_file=/Users/nick/.ssh/id_rsa
+
+[dev]
+devbox
+
+[vm]
+debian
+
+[webservers]
+debian
