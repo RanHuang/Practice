@@ -1,0 +1,123 @@
+- name: Install Zookeeper Cluster
+  hosts: zookeeper
+  remote_user: root
+  environment:
+    JAVA_HOME: "{{java_home}}"
+    PATH: '{{java_home}}/bin:{{zookeeper_home}}/bin:{{ansible_env.PATH}}'
+  tasks:
+    - name: Ensure group "zookeeper" exists
+      group:
+        name: zookeeper
+        state: present
+    - name: Create user "zookeeper"
+      user:
+        name: zookeeper
+        shell: /bin/bash
+        createhome: yes
+        home: "{{zk_user_home}}"
+        group: zookeeper
+        state: present
+
+    - name: Create zookeeper directory
+      file:
+        path: "{{item}}"
+        state: directory
+        owner: zookeeper
+        group: zookeeper
+      with_items:
+        - "{{zk_user_home}}/data"
+        - "{{zk_user_home}}/logs"
+
+    - name: Check whether the zk deploy directory exists.
+      stat:
+        path: "{{zookeeper_home}}"
+      register: zk_deploy_stat
+
+    - name: Deploy zookeeper.
+      block:
+        - name: Copy zookeeper package
+          copy:
+            src: ../software/{{zk_pkg}}
+            dest: "{{zk_user_home}}/"
+            owner: zookeeper
+            group: zookeeper
+        - name: Unarchive zookeeper package
+          shell: |
+            cd ~
+            tar zxf {{zk_pkg}}
+        - name: Create a symbolic link for zookeeper
+          file:
+            src: "{{zk_user_home}}/apache-zookeeper-3.5.6-bin"
+            dest: "{{zk_user_home}}/zookeeper"
+            state: link
+        - name: Create myid
+          copy:
+            dest: "{{zk_user_home}}/data/myid"
+            content: "{{myid}}"
+        - name: Init zoo.cfg
+          template:
+            src: ../templates/zoo.cfg.tpl
+            dest: "{{zk_user_home}}/zookeeper/conf/zoo.cfg"
+        - name: Set log dir.
+          shell: |
+            cd {{zookeeper_home}}/conf
+            sed -i "s#^zookeeper.log.dir.*#zookeeper.log.dir=/home/zookeeper/logs/#" log4j.properties
+            sed -i "s/^zookeeper.root.logger=.*/zookeeper.root.logger=INFO, ROLLINGFILE/" log4j.properties
+
+            cd {{zookeeper_home}}/bin
+            sed -i 's#ZOO_LOG_DIR="$ZOOKEEPER_PREFIX/logs"#ZOO_LOG_DIR="/home/zookeeper/logs"#' zkEnv.sh
+            sed -i 's/ZOO_LOG4J_PROP="INFO,CONSOLE"/ZOO_LOG4J_PROP="INFO,ROLLINGFILE"/' zkEnv.sh
+        - name: Set env
+          shell: |
+            grep ZOOKEEPER_HOME {{zk_user_home}}/.bashrc
+            if [ $? -ne 0  ];then
+               echo  "export ZOOKEEPER_HOME=/home/zookeeper/zookeeper" >> {{zk_user_home}}/.bashrc
+               echo  "export PATH=\${ZOOKEEPER_HOME}/bin:\$PATH" >> {{zk_user_home}}/.bashrc
+            fi
+      become: true
+      become_user: zookeeper
+      when: zk_deploy_stat.stat.exists == False
+
+    - name: Start zookeeper
+      block:
+        - name: Check zk status
+          shell: |
+            cd {{zookeeper_home}}/bin
+            ./zkServer.sh status
+            if [ $? -ne 0 ];then
+                echo "#zk inactive#" >&2
+            fi
+          args:
+            executable: /bin/bash
+          register: service_state
+        - name: Start zookeeper
+          shell: |
+            cd {{zookeeper_home}}/bin
+            ./zkServer.sh start
+          when: service_state.stderr.find('#zk inactive#') != -1
+      become: true
+      become_user: zookeeper
+
+    ## 检测zk服务状态
+    - name: Check zk process
+      shell: |
+        jps | grep QuorumPeerMain
+        if [ $? -ne 0 ];then
+            echo "@zk is inactive@" >&2
+        fi
+      register: jps_zk
+      failed_when: jps_zk.stderr.find('zk is inactive') != -1
+    - debug:
+        msg: QuorumPeerMain is active.
+    - name: Check zk服务状态.
+      shell: zkServer.sh status
+      register: zk_status
+      failed_when: 'zk_status.stdout.find("Mode: follower") == -1 and zk_status.stdout.find("Mode: leader") == -1'
+    - name: 显示zk节点身份信息
+      debug:
+        msg: "{{zk_status.stdout}}"
+
+    - name: 删除{{zk_pkg}}
+      file:
+        path: "{{zk_user_home}}/{{zk_pkg}}"
+        state: absent

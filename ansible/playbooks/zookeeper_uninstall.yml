@@ -1,0 +1,39 @@
+- name: Uninstall Zookeeper
+  hosts: zookeeper
+  remote_user: root
+  environment:
+    JAVA_HOME: "{{java_home}}"
+    PATH: '{{java_home}}/bin:{{zookeeper_home}}/bin:{{ansible_env.PATH}}'
+  tasks:
+    - name: Check zk service
+      shell: |
+        zkServer.sh status
+        if [ $? -ne 0 ];then
+            echo "\n#zk is inactive#" >&2
+        fi
+      args:
+        executable: /bin/bash
+      register: service_state
+    - name: Stop zk service
+      shell: zkServer.sh stop
+      when: service_state.stderr.find('zk is inactive') == -1
+
+
+    - name: "delete deploy directories: data, logs, software"
+      file:
+        path: "{{zk_user_home}}/{{item}}"
+        state: absent
+      with_items:
+        - data
+        - logs
+        - zookeeper
+        - apache-zookeeper-3.5.6-bin
+    - name: delete the zk env from profile
+      shell: |
+        lS=$(sed = /home/zookeeper/.bashrc | sed 'N;s/\n/\t/' | grep 'export ZOOKEEPER_HOME' |awk '{print $1}')
+        if [ -n "$lS" ];then
+          let lE=lS+1
+          sed -i "$lS,${lE}d" /home/zookeeper/.bashrc
+        fi
+      args:
+        executable: /bin/bash
