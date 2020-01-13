@@ -1,0 +1,55 @@
+- name: 安装JDK
+  hosts: jdk
+  remote_user: root
+  environment:
+    PATH: '{{java_path}}/bin:{{ansible_env.PATH}}'
+  tasks:
+    - name: Check whether the JDK has been installed.
+      stat:
+        path: "{{jdk_deploy_folder}}/jdk1.8.0_231"
+      register: jdk_deploy_state
+
+    - name: Deploy JDK
+      block:
+        - name: create directories for jdk package
+          file:
+            path: "{{jdk_deploy_folder}}"
+            state: directory
+            recurse: yes
+        - name: Transport {{jdk_pkg}}
+          copy:
+            src: "../software/{{jdk_pkg}}"
+            dest: "{{jdk_deploy_folder}}"
+        - name: Unarchive {{jdk_pkg}}
+          unarchive:
+            src:  "{{jdk_deploy_folder}}/{{jdk_pkg}}"
+            dest: "{{jdk_deploy_folder}}"
+            remote_src: yes
+      when: jdk_deploy_state.stat.exists == False
+
+    - name: Create a soft link to JDK Home
+      file:
+        src: "{{jdk_deploy_folder}}/jdk1.8.0_231"
+        dest: "{{java_path}}"
+        state: link
+    - name: set env
+      shell: |
+        grep JAVA_HOME /etc/profile
+        if [ $? -ne 0 ];then
+            echo "# JDK ENV" >> /etc/profile
+            echo "export JAVA_HOME={{java_path}}" >> /etc/profile
+            echo "export JRE_HOME={{java_path}}/jre" >> /etc/profile
+            echo "export CLASSPATH=.:\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib/tools.jar:\$JRE_HOME/lib:\$CLASSPATH" >> /etc/profile
+            echo "export PATH=\$JAVA_HOME/bin:\$PATH" >> /etc/profile
+        fi
+
+    - name: Check Java Environment
+      command: java -version
+      register: java_cmd
+      failed_when: java_cmd.rc != 0
+    - debug:
+        msg: "JDK部署成功!"
+    - name: remove jdk package
+      file:
+        path: "{{jdk_deploy_folder}}/{{jdk_pkg}}"
+        state: absent

@@ -3,8 +3,12 @@
 192.168.0.16
 192.168.0.26
 
+[jdk:vars]
+jdk_pkg=jdk-8u231-linux-x64.tar.gz
+jdk_deploy_folder=/opt/jdk
+java_path="{{jdk_deploy_folder}}/jdk1.8"
+
 [zookeeper]
 192.168.0.6 myid=1
 192.168.0.16 myid=2
 192.168.0.26 myid=3
-

@@ -1,0 +1,17 @@
+- name: Uninstall JDK
+  hosts: jdk
+  remote_user: root
+  tasks:
+    - name: "Delete deploy folder: {{deploy_folder}}"
+      file:
+        path: "{{jdk_deploy_folder}}"
+        state: absent
+    - name: Delete the jdk env from /etc/profile
+      shell: |
+        lS=$(sed = /etc/profile | sed 'N;s/\n/\t/' | grep 'JDK ENV' |awk '{print $1}')
+        lE=$(sed = /etc/profile | sed 'N;s/\n/\t/' | grep '$JAVA_HOME/bin' |awk '{print $1}')
+        if [ -n "$lS" ] && [ -n "$lE" ] ;then
+          sed -i "$lS,${lE}d" /etc/profile
+        fi
+      args:
+        executable: /bin/bash
