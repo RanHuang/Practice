@@ -44,7 +44,7 @@ Vagrant.configure("2") do |config|
 
         # 安装工具软件
         apt-get update
-        apt-get install -y vim htop net-tools tree
+        apt-get install -y vim htop net-tools sysstat tree
   SHELL
 end
 
