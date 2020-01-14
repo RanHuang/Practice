@@ -18,3 +18,14 @@ zk_pkg=apache-zookeeper-3.5.6-bin.tar.gz
 zk_user_home=/home/zookeeper
 zookeeper_home=/home/zookeeper/zookeeper
 java_home=/opt/jdk/jdk1.8
+
+[kafka]
+192.168.0.6 broker_id=0
+192.168.0.16 broker_id=1
+192.168.0.26 broker_id=2
+[kafka:vars]
+kafka_pkg=kafka_2.12-2.4.0.tgz
+kafka_user_home=/home/kafka
+kafka_home=/home/kafka/kafka
+zookeeper_connect=192.168.0.6:2181,192.168.0.16:2181,192.168.0.26:2181
+java_home=/opt/jdk/jdk1.8

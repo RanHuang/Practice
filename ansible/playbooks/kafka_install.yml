@@ -1,0 +1,102 @@
+- name: Install Kafka Cluster
+  hosts: kafka
+  remote_user: root
+  environment:
+    JAVA_HOME: "{{java_home}}"
+    PATH: '{{java_home}}/bin:{{kafka_home}}/bin:{{ansible_env.PATH}}'
+  tasks:
+    - name: Ensure group "kafka" exists
+      group:
+        name: kafka
+        state: present
+    - name: Create user "kafka"
+      user:
+        name: kafka
+        shell: /bin/bash
+        createhome: yes
+        home: "{{kafka_user_home}}"
+        group: kafka
+        state: present
+
+    - name: Create kafka directory
+      file:
+        path: "{{kafka_user_home}}/logs"
+        state: directory
+        owner: kafka
+        group: kafka
+        mode: "0775"
+
+    - name: Check whether the kafka deploy directory exists.
+      stat:
+        path: "{{kafka_home}}"
+      register: kafka_deploy_stat
+
+    - name: Deploy kafka.
+      block:
+        - name: Copy kafka package
+          copy:
+            src: ../software/{{kafka_pkg}}
+            dest: "{{kafka_user_home}}/"
+            owner: kafka
+            group: kafka
+        - name: Unarchive kafka package
+          unarchive:
+            src:  "{{kafka_user_home}}/{{kafka_pkg}}"
+            dest: "{{kafka_user_home}}"
+            remote_src: yes
+        - name: Create a symbolic link for kafka
+          file:
+            src: "{{kafka_user_home}}/kafka_2.12-2.4.0"
+            dest: "{{kafka_user_home}}/kafka"
+            state: link
+        - name: Init server.properties
+          template:
+            src: ../templates/kafka-server.properties.tpl
+            dest: "{{kafka_user_home}}/kafka/config/server.properties"
+        - name: Set env
+          shell: |
+            grep KAFKA_HOME {{kafka_user_home}}/.bashrc
+            if [ $? -ne 0  ];then
+               echo  "export KAFKA_HOME={{kafka_home}}" >> {{kafka_user_home}}/.bashrc
+               echo  "export PATH=\${KAFKA_HOME}/bin:\$PATH" >> {{kafka_user_home}}/.bashrc
+            fi
+      become: true
+      become_user: kafka
+      when: kafka_deploy_stat.stat.exists == False
+
+    - name: Delete {{kafka_pkg}}
+      file:
+        path: "{{kafka_user_home}}/{{kafka_pkg}}"
+        state: absent
+
+    - name: Check kafka process state.
+      shell: |
+        jps | grep -v grep | grep Kafka
+        if [ $? -eq 0 ];then
+          echo "kafka is active."
+        fi
+      register: kafka_state
+    - name: Start kafka
+      shell: |
+        cd {{kafka_home}}
+        ./bin/kafka-server-start.sh -daemon config/server.properties
+      become: true
+      become_user: kafka
+      when: kafka_state.stdout.find('is active') == -1
+    - debug:
+        msg: "{{kafka_state.stdout_lines}}"
+      when: kafka_state.stdout.find('is active') != -1
+
+    - name: Create a topic for test.
+      shell: |
+        kafka-topics.sh --zookeeper {{zookeeper_connect}} --create --if-not-exists  \
+        --replication-factor=2 --partitions=3 --topic test
+        if [ $? -eq 0 ]; then
+            kafka-topics.sh --zookeeper {{zookeeper_connect}} --list
+        fi
+      become: true
+      become_user: kafka
+      register: kafka_topics
+    - name: Create or show kafka topics.
+      debug:
+        msg: "{{kafka_topics.stdout_lines}}"

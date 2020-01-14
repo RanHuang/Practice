@@ -1,0 +1,32 @@
+- name: Uninstall Kafka
+  hosts: kafka
+  remote_user: root
+  environment:
+    JAVA_HOME: "{{java_home}}"
+    PATH: '{{java_home}}/bin:{{kafka_home}}/bin:{{ansible_env.PATH}}'
+  tasks:
+    - name: Stop kafka service.
+      shell: |
+        jps | grep -v grep | grep Kafka
+        if [ $? -eq 0 ];then
+           kafka-server-stop.sh
+        fi
+      become: true
+      become_user: kafka
+    - name: Delete deploy directories.
+      file:
+        path: "{{kafka_user_home}}/{{item}}"
+        state: absent
+      with_items:
+        - logs
+        - kafka
+        - kafka_2.12-2.4.0
+    - name: Delete the kafka env from {{kafka_user_home}}/.bashrc
+      shell: |
+        lS=$(sed = /home/kafka/.bashrc | sed 'N;s/\n/\t/' | grep 'export KAFKA_HOME' | awk '{print $1}')
+        if [ -n "$lS" ];then
+          let lE=lS+1
+          sed -i "$lS,${lE}d" /home/kafka/.bashrc
+        fi
+      args:
+        executable: /bin/bash
