@@ -56,7 +56,7 @@
             content: "{{myid}}"
         - name: Init zoo.cfg
           template:
-            src: ../templates/zoo.cfg.tpl
+            src: ../templates/zoo.cfg.j2
             dest: "{{zk_user_home}}/zookeeper/conf/zoo.cfg"
         - name: Set log dir.
           shell: |

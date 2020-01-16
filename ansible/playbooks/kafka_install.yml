@@ -51,7 +51,7 @@
             state: link
         - name: Init server.properties
           template:
-            src: ../templates/kafka-server.properties.tpl
+            src: ../templates/kafka-server.properties.j2
             dest: "{{kafka_user_home}}/kafka/config/server.properties"
         - name: Set env
           shell: |
@@ -89,6 +89,7 @@
 
     - name: Create a topic for test.
       shell: |
+        sleep 2
         kafka-topics.sh --zookeeper {{zookeeper_connect}} --create --if-not-exists  \
         --replication-factor=2 --partitions=3 --topic test
         if [ $? -eq 0 ]; then
