@@ -1,7 +1,7 @@
 [jdk]
 192.168.0.6
-192.168.0.16
-192.168.0.26
+192.168.0.7
+192.168.0.8
 
 [jdk:vars]
 jdk_pkg=jdk-8u231-linux-x64.tar.gz
@@ -10,8 +10,8 @@ java_path="{{jdk_deploy_folder}}/jdk1.8"
 
 [zookeeper]
 192.168.0.6 myid=1
-192.168.0.16 myid=2
-192.168.0.26 myid=3
+192.168.0.7 myid=2
+192.168.0.8 myid=3
 
 [zookeeper:vars]
 zk_pkg=apache-zookeeper-3.5.6-bin.tar.gz
@@ -21,11 +21,11 @@ java_home=/opt/jdk/jdk1.8
 
 [kafka]
 192.168.0.6 broker_id=0
-192.168.0.16 broker_id=1
-192.168.0.26 broker_id=2
+192.168.0.7 broker_id=1
+192.168.0.8 broker_id=2
 [kafka:vars]
 kafka_pkg=kafka_2.12-2.4.0.tgz
 kafka_user_home=/home/kafka
 kafka_home=/home/kafka/kafka
-zookeeper_connect=192.168.0.6:2181,192.168.0.16:2181,192.168.0.26:2181
+zookeeper_connect=192.168.0.6:2181,192.168.0.7:2181,192.168.0.8:2181
 java_home=/opt/jdk/jdk1.8
